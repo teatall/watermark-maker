@@ -17,6 +17,7 @@ for (var i = 0; i < input.length; i++) {
         let node = document.createElement("span");
         node.innerHTML = input[i].value;
         node.id = input[i].id + "-span";
+        node.className = 'badge rounded-pill bg-info';
         label[i].appendChild(node)
     }
 };
