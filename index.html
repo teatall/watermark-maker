@@ -9,19 +9,17 @@
 </head>
 
 <body>
-    <div>
-        <p></p>
+    <div class="container">
         <div class="input-group mb-3">
             <label class="input-group-text" for="upload">选择图片</label>
-            <input id="upload" type="file" accept="image/*" title="upload"></label>
+            <input id="upload" type="file" accept="image/*" title="upload" class="form-control"></label>
         </div>
 
-        <label>
-            
-        <label>
-            水印文字：
-            <input id="content" type="text" value="仅供XX实名认证使用">
-        </label>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="content">水印文字</label>
+            <input id="content" type="text" value="仅作某某用途之用" class="form-control">
+        </div>
+
         <label>
             水印颜色：
             <input id="color" type="color" value="#ffffff">
