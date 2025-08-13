@@ -22,6 +22,17 @@ for (var i = 0; i < input.length; i++) {
     }
 };
 
+// Add event listener for textarea (content field)
+var contentTextarea = document.getElementById('content');
+if (contentTextarea && contentTextarea.tagName === 'TEXTAREA') {
+    contentTextarea.onchange = function() {
+        loadImage();
+    };
+    contentTextarea.oninput = function() {
+        loadImage();
+    };
+}
+
 function loadImage() {
     for (var x of input) {
         if (document.getElementById(x.id + "-span")) {
@@ -51,13 +62,35 @@ function loadImage() {
             var gap = size * document.getElementById('gap').value / 100;
             var content = document.getElementById('content').value;
             if (!content.length) return;
-            var limit = Math.sqrt(2 * (maxSize * maxSize));
-            var breaker = ctx.measureText(content).width;
-            for (var h = -maxSize, even = false; h <= limit; h += size + gap, even = !even) {
-                for (var v = -maxSize - (even ? breaker / 2 : 0); v <= limit + (even ? breaker / 2 : 0); v += breaker + size) {
-                    ctx.fillText(content, v, h)
+            
+            // Split content into lines and handle multi-line text
+            var lines = content.split('\n');
+            var lineHeight = size * 1.2; // 20% line spacing
+            var totalTextHeight = lines.length * lineHeight;
+            
+            // Calculate the maximum width of all lines for proper spacing
+            var maxTextWidth = 0;
+            for (var i = 0; i < lines.length; i++) {
+                var lineWidth = ctx.measureText(lines[i]).width;
+                if (lineWidth > maxTextWidth) {
+                    maxTextWidth = lineWidth;
                 }
-            };
+            }
+            
+            var limit = Math.sqrt(2 * (maxSize * maxSize));
+            
+            // Draw the multi-line watermark pattern
+            for (var h = -maxSize - totalTextHeight, even = false; h <= limit; h += totalTextHeight + gap, even = !even) {
+                for (var v = -maxSize - (even ? maxTextWidth / 2 : 0); v <= limit + (even ? maxTextWidth / 2 : 0); v += maxTextWidth + size) {
+                    // Draw each line of the multi-line text
+                    for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+                        if (lines[lineIndex].trim()) { // Only draw non-empty lines
+                            ctx.fillText(lines[lineIndex], v, h + (lineIndex * lineHeight));
+                        }
+                    }
+                }
+            }
+            
             can2jpg(canvas)
         }
     }
