@@ -12,13 +12,16 @@ for (var i = 0; i < input.length; i++) {
             loadImage()
         }
     })(i);
-    if (2 <= i && i <= 6) {
-        let label = document.getElementsByTagName('label');
-        let node = document.createElement("span");
-        node.innerHTML = input[i].value;
-        node.id = input[i].id + "-span";
-        node.className = 'badge rounded-pill bg-info ms-1';
-        label[i].appendChild(node)
+    // Add value display spans for range inputs (alpha, size, gap, rotate)
+    if (input[i].type === 'range') {
+        let label = document.querySelector('label[for="' + input[i].id + '"]');
+        if (label) {
+            let node = document.createElement("span");
+            node.innerHTML = input[i].value;
+            node.id = input[i].id + "-span";
+            node.className = 'badge rounded-pill bg-info ms-1';
+            label.appendChild(node);
+        }
     }
 };
 
